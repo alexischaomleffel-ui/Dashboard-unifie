@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <style>
+    @keyframes rmRise { from { opacity:0; transform:translateY(6px) } to { opacity:1; transform:none } }
+    @keyframes rmShim { 0% { opacity:.45 } 50% { opacity:.8 } 100% { opacity:.45 } }
+    @keyframes rmToast { from { opacity:0; transform:translateY(8px) } to { opacity:1; transform:none } }
+    body { margin:0 }
+    a { color:#0F2A48; text-decoration:none }
+    a:hover { color:#12232E }
+  </style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;align-items:stretch;background:#F6FAF9;font-family:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif;font-size:14px;line-height:1.5;color:#12232E;-webkit-font-smoothing:antialiased">
+
+  <aside style="flex:0 0 236px;background:#FFFFFF;border-right:1px solid #DCE5EA;padding:20px 14px;display:flex;flex-direction:column;gap:22px">
+    <div style="display:flex;align-items:center;gap:10px;padding:0 8px">
+      <span style="width:30px;height:30px;border-radius:9px;background:#0F2A48;color:#FFFFFF;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex:none">D</span>
+      <div style="min-width:0">
+        <div style="font-size:14px;font-weight:700;letter-spacing:-.01em">{{ brandName }}</div>
+        <div style="font-size:11px;color:#6B8494">Réconciliation marketing</div>
+      </div>
+    </div>
+
+    <nav style="display:flex;flex-direction:column;gap:4px">
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="3">
+        <button onClick="{{ n.onClick }}" style="font:inherit;text-align:left;border:none;cursor:pointer;padding:10px 12px;border-radius:10px;display:flex;flex-direction:column;gap:2px;transition:background .15s,color .15s;background:{{ n.bg }};color:{{ n.color }}" style-hover="background:#EDF2F1">
+          <span style="font-size:13px;font-weight:600">{{ n.label }}</span>
+          <span style="font-size:11px;color:{{ n.subColor }}">{{ n.sub }}</span>
+        </button>
+      </sc-for>
+    </nav>
+
+    <div style="margin-top:auto;border-top:1px solid #DCE5EA;padding:14px 10px 0">
+      <div style="font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#6B8494;font-weight:600;margin-bottom:8px">Sources connectées</div>
+      <sc-for list="{{ sources }}" as="s" hint-placeholder-count="5">
+        <div style="display:flex;align-items:center;gap:8px;padding:4px 0">
+          <span style="width:6px;height:6px;border-radius:50%;background:{{ s.dot }};flex:none"></span>
+          <span style="font-size:12px;color:#47606E;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ s.name }}</span>
+          <span style="font-size:10px;color:#6B8494;font-variant-numeric:tabular-nums">{{ s.sync }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </aside>
+
+  <main style="flex:1;min-width:0;padding:22px 26px 56px">
+    <div style="max-width:1440px;margin:0 auto">
+
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px">
+        <div>
+          <h1 style="font-size:21px;font-weight:700;margin:0;letter-spacing:-.015em">{{ pageTitle }}</h1>
+          <div style="font-size:13px;color:#6B8494;margin-top:4px">{{ pageSub }}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button onClick="{{ onExport }}" style="font:inherit;font-size:12px;font-weight:600;padding:8px 14px;border-radius:999px;border:1.5px solid #C6D3DC;background:#FFFFFF;color:#0F2A48;cursor:pointer;transition:all .15s" style-hover="border-color:#0F2A48;background:#EDF2F1">Exporter (PDF)</button>
+          <button onClick="{{ onShare }}" style="font:inherit;font-size:12px;font-weight:600;padding:8px 14px;border-radius:999px;border:none;background:#0F2A48;color:#FFFFFF;cursor:pointer;transition:background .15s" style-hover="background:#12232E">Partager</button>
+        </div>
+      </div>
+
+      <div style="background:#FFFFFF;border:1px solid #DCE5EA;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#6B8494;font-weight:600">Période</span>
+          <div style="display:flex;gap:6px">
+            <sc-for list="{{ periodChips }}" as="p" hint-placeholder-count="4">
+              <button onClick="{{ p.onClick }}" style="font:inherit;font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;cursor:pointer;transition:all .15s;border:1px solid {{ p.border }};background:{{ p.bg }};color:{{ p.color }}">{{ p.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#6B8494;font-weight:600">Canal</span>
+          <div style="display:flex;gap:6px">
+            <sc-for list="{{ typeChips }}" as="p" hint-placeholder-count="3">
+              <button onClick="{{ p.onClick }}" style="font:inherit;font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;cursor:pointer;transition:all .15s;border:1px solid {{ p.border }};background:{{ p.bg }};color:{{ p.color }}">{{ p.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#6B8494;font-weight:600">Programme</span>
+          <select value="{{ program }}" onChange="{{ onProgram }}" style="font-family:inherit;font-size:12px;font-weight:600;color:#12232E;background:#FFFFFF;border:1px solid #C6D3DC;border-radius:8px;padding:6px 10px;outline:none;cursor:pointer" style-focus="border-color:#0F2A48">
+            <sc-for list="{{ programOptions }}" as="o" hint-placeholder-count="7">
+              <option value="{{ o.value }}">{{ o.label }}</option>
+            </sc-for>
+          </select>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#6B8494;font-weight:600">Campagne</span>
+          <select value="{{ campaign }}" onChange="{{ onCampaign }}" style="font-family:inherit;font-size:12px;font-weight:600;color:#12232E;background:#FFFFFF;border:1px solid #C6D3DC;border-radius:8px;padding:6px 10px;outline:none;cursor:pointer" style-focus="border-color:#0F2A48">
+            <sc-for list="{{ campaignOptions }}" as="o" hint-placeholder-count="6">
+              <option value="{{ o.value }}">{{ o.label }}</option>
+            </sc-for>
+          </select>
+        </div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
+          <span style="font-size:12px;color:#6B8494;font-variant-numeric:tabular-nums">{{ rangeLabel }}</span>
+          <sc-if value="{{ hasFilters }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ onResetFilters }}" style="font:inherit;font-size:11px;font-weight:600;padding:5px 10px;border-radius:999px;border:1px solid #C6D3DC;background:#FFFFFF;color:#6B8494;cursor:pointer" style-hover="border-color:#0F2A48;color:#0F2A48">Réinitialiser</button>
+          </sc-if>
+        </div>
+      </div>
+
+      <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+          <sc-for list="{{ skeletons }}" as="s" hint-placeholder-count="6">
+            <div style="background:#FFFFFF;border:1px solid #DCE5EA;border-radius:16px;padding:18px;animation:rmShim 1.1s ease-in-out infinite">
+              <div style="height:10px;width:42%;border-radius:5px;background:#EDF2F1"></div>
+              <div style="height:26px;width:64%;border-radius:6px;background:#EDF2F1;margin:14px 0 10px"></div>
+              <div style="height:34px;border-radius:8px;background:#F0F5F4"></div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- ══════════ VUE 1 — SYNTHÈSE COMEX ══════════ -->
+      <sc-if value="{{ isComex }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(520px,1fr));gap:16px;align-items:start">
+
+          <section style="display:flex;flex-direction:column;gap:14px;min-width:0">
+            <div style="display:flex;align-items:baseline;gap:10px">
+              <h2 style="font-size:15px;font-weight:700;margin:0;letter-spacing:-.01em">Branding</h2>
+              <span style="font-size:11px;color:#6B8494">Notoriété, pression publicitaire, indicateurs tiers</span>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE5EA;border-radius:16px;padding:18px;animation:rmRise .35s ease both">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">
+                <h3 style="font-size:14px;font-weight:600;margin:0">Notoriété de marque</h3>
+                <span style="font-size:11px;color:#6B8494">{{ notoSource }}</span>
+              </div>
+              <div style="display:flex;gap:14px;margin:14px 0 6px">
+                <sc-for list="{{ notoKpis }}" as="k" hint-placeholder-count="2">
+                  <div style="flex:1;min-width:0;border:1px solid #DCE5EA;border-radius:12px;padding:12px">
+                    <span style="font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#6B8494;font-weight:600">{{ k.label }}</span>
+                    <div style="display:flex;align-items:baseline;gap:8px;margin-top:6px">
+                      <span style="font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums">{{ k.value }}</span>
+                      <span style="font-size:11px;font-weight:700;color:{{ k.deltaColor }}">{{ k.delta }}</span>
+                    </div>
+                    <div style="font-size:11px;color:#6B8494;margin-top:4px">{{ k.sub }}</div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex;align-items:flex-end;gap:10px;height:132px;padding-top:10px;border-bottom:1px solid #DCE5EA">
+                <sc-for list="{{ waves }}" as="w" hint-placeholder-count="6">
+                  <div style="flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px">
+                    <div style="display:flex;align-items:flex-end;gap:3px;height:110px;width:100%;justify-content:center">
+                      <div title="{{ w.spontTitle }}" style="width:16px;border-radius:4px 4px 0 0;background:#0F2A48;height:{{ w.spontH }}"></div>
+                      <div title="{{ w.assistTitle }}" style="width:16px;border-radius:4px 4px 0 0;background:#8FB3C7;height:{{ w.assistH }}"></div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex;gap:10px;margin-top:6px">
+                <sc-for list="{{ waves }}" as="w" hint-placeholder-count="6">
+                  <div style="flex:1;min-width:0;text-align:center;font-size:10px;color:#6B8494;font-weight:600">{{ w.label }}</div>
+                </sc-for>
+              </div>
+              <div style="display:flex;gap:14px;margin-top:10px">
+                <span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#47606E"><span style="width:8px;height:8px;border-radius:2px;background:#0F2A48"></span>Spontanée</span>
+                <span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#47606E"><span style="width:8px;height:8px;border-radius:2px;background:#8FB3C7"></span>Assistée</span>
+                <span style="margin-left:auto;font-size:11px;color:#6B8494">{{ notoBase }}</span>
+              </div>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE5EA;border-radius:16px;padding:18px;animation:rmRise .4s ease both">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px">
+                <h3 style="font-size:14px;font-weight:600;margin:0">Pression publicitaire</h3>
+                <span style="font-size:11px;color:#6B8494">Régies · {{ pressionSub }}</span>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px">
+                <sc-for list="{{ pressionKpis }}" as="k" hint-placeholder-count="3">
+                  <button onClick="{{ k.onClick }}" style="font:inherit;text-align:left;cursor:pointer;border:1px solid #DCE5EA;border-radius:12px;padding:12px;background:#FFFFFF;transition:border-color .15s,background .15s" style-hover="border-color:#0F2A48;background:#F0F5F4">
+                    <span style="font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#6B8494;font-weight:600">{{ k.label }}</span>
+                    <div style="font-size:24px;font-weight:700;letter-spacing:-.02em;margin:6px 0 4px;line-height:1;font-variant-numeric:tabular-nums">{{ k.value }}</div>
+                    <div style="display:flex;align-items:center;gap:6px">
+                      <span style="font-size:11px;font-weight:700;padding:1px 6px;border-radius:999px;color:{{ k.deltaColor }};background:{{ k.deltaBg }}">{{ k.delta }}</span>
+                      <span style="font-size:11px;color:#6B8494">{{ k.sub }}</span>
+                    </div>
+                  </button>
+                </sc-for>
+              </div>
+              <div style="margin-top:14px">
+                <div style="display:flex;height:8px;border-radius:999px;overflow:hidden;background:#EDF2F1">
+                  <sc-for list="{{ pressionMix }}" as="m" hint-placeholder-count="7">
+                    <div title="{{ m.title }}" style="width:{{ m.w }};background:{{ m.color }}"></div>
+                  </sc-for>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px">
+                  <sc-for list="{{ pressionMix }}" as="m" hint-placeholder-count="7">
+                    <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#47606E"><span style="width:7px;height:7px;border-radius:50%;background:{{ m.color }}"></span>{{ m.label }}</span>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:12px">
+              <sc-for list="{{ tiersKpis }}" as="k" hint-placeholder-count="5">
+                <button onClick="{{ k.onClick }}" style="font:inherit;text-align:left;cursor:pointer;background:#FFFFFF;border:1px solid #DCE5EA;border-radius:14px;padding:14px;transition:border-color .15s,background .15s;animation:rmRise .45s ease both" style-hover="border-color:#0F2A48;background:#F0F5F4">
+                  <span style="font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#6B8494;font-weight:600">{{ k.label }}</span>
+                  <div style="font-size:22px;font-weight:700;letter-spacing:-.02em;margin:6px 0 4px;line-height:1;font-variant-numeric:tabular-nums">{{ k.value }}</div>
+                  <div style="display:flex;align-items:center;gap:6px">
+                    <span style="font-size:11px;font-weight:700;padding:1px 6px;border-radius:999px;color:{{ k.deltaColor }};background:{{ k.deltaBg }}">{{ k.delta }}</span>
+                    <span style="font-size:11px;color:#6B8494;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ k.sub }}</span>
+                  </div>
+                </button>
+              </sc-for>
+            </div>
+          </section>
+
+          <section style="display:flex;flex-direction:column;gap:14px;min-width:0">
+            <div style="display:flex;align-items:baseline;gap:10px">
+              <h2 style="font-size:15px;font-weight:700;margin:0;letter-spacing:-.01em">Performance commerciale</h2>
+              <span style="font-size:11px;color:#6B8494">Offre et conversion — source CRM</span>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <sc-for list="{{ offreKpis }}" as="k" hint-placeholder-count="2">
+                <div style="background:#FFFFFF;border:1px solid #DCE5EA;border-radius:14px;padding:14px;animation:rmRise .35s ease both">
+                  <span style="font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#6B8494;font-weight:600">{{ k.label }}</span>
+                  <div style="font-size:26px;font-weight:700;letter-spacing:-.02em;margin:6px 0 4px;line-height:1;font-variant-numeric:tabular-nums">{{ k.value }}</div>
+                  <div style="font-size:11px;color:#6B8494">{{ k.sub }}</div>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+              <sc-for list="{{ convKpis }}" as="k" hint-placeholder-count="3">
+                <button onClick="{{ k.onClick }}" style="font:inherit;text-align:left;cursor:pointer;background:#FFFFFF;border:1px solid #DCE5EA;border-radius:16px;padding:16px;transition:border-color .15s,background .15s;animation:rmRise .4s ease both" style-hover="border-color:#0F2A48;background:#F0F5F4">
+                  <span style="font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#6B8494;font-weight:600">{{ k.label }}</span>
+                  <div style="font-size:32px;font-weight:700;letter-spacing:-.025em;margin:8px 0 6px;line-height:1;font-variant-numeric:tabular-nums">{{ k.value }}</div>
+                  <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+                    <span style="font-size:11px;font-weight:700;padding:1px 6px;border-radius:999px;color:{{ k.deltaColor }};background:{{ k.deltaBg }}">{{ k.delta }}</span>
+                    <span style="font-size:11px;color:#6B8494">{{ k.sub }}</span>
+                  </div>
+                  <svg viewBox="0 0 220 44" preserveAspectRatio="none" style="width:100%;height:40px;display:block">
+                    <path d="{{ k.sparkArea }}" fill="#E7EDF3"></path>
+                    <path d="{{ k.spark }}" fill="none" stroke="#0F2A48" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>
+                  </svg>
+                </button>
+              </sc-for>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid #DCE5EA;border-radius:16px;padding:18px;animation:rmRise .45s ease both">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px">
+                <h3 style="font-size:14px;font-weight:600;margin:0">Programmes à la vente</h3>
+                <span style="font-size:11px;color:#6B8494">CRM · mise à jour quotidienne</span>
+              </div>
+              <div style="overflow-x:auto">
+                <table style="width:100%;border-collapse:collapse;min-width:520px">
+                  <thead><tr>
+                    <sc-for list="{{ progCols }}" as="c" hint-placeholder-count="6">
+                      <th style="text-align:{{ c.align }};font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#6B8494;font-weight:600;padding:8px;border-bottom:1px solid #DCE5EA;white-space:nowrap">{{ c.label }}</th>
+                    </sc-for>
+                  </tr></thead>
+                  <tbody>
+                    <sc-for list="{{ progRows }}" as="r" hint-placeholder-count="6">
+                      <tr onClick="{{ r.onClick }}" style="cursor:pointer;transition:background .12s" style-hover="background:#F0F5F4">
+                        <td style="padding:10px 8px;border-bottom:{{ r.border }}">
+                          <div style="font-size:13px;font-weight:600">{{ r.name }}</div>
+                          <div style="font-size:11px;color:#6B8494">{{ r.city }}</div>
+                        </td>
+                        <td style="padding:10px 8px;border-bottom:{{ r.border }};text-align:right;font-size:13px;font-variant-numeric:tabular-nums">{{ r.lots }}</td>
+                        <td style="padding:10px 8px;border-bottom:{{ r.border }};text-align:right;font-size:13px;font-variant-numeric:tabular-nums">{{ r.leads }}</td>
+                        <td style="padding:10px 8px;border-bottom:{{ r.border }};text-align:right;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums">{{ r.sales }}</td>
+                        <td style="padding:10px 8px;border-bottom:{{ r.border }};text-align:right;font-size:13px;font-variant-numeric:tabular-nums">{{ r.ca }}</td>
+                        <td style="padding:10px 8px;border-bottom:{{ r.border }};text-align:right">
+                          <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
+                            <div style="width:64px;height:5px;border-radius:3px;background:#EDF2F1;overflow:hidden"><div style="height:5px;border-radius:3px;background:#0F2A48;width:{{ r.ecoulW }}"></div></div>
+                            <span style="font-size:12px;font-variant-numeric:tabular-nums;color:#47606E;width:38px;text-align:right">{{ r.ecoul }}</span>
+                          </div>
+                        </td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        </div>
+      </sc-if>
+
+      <!-- ══════════ VUE 1b — SYNTHÈSE TRIMESTRIELLE ══════════ -->
+      <sc-if value="{{ isGrid }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <div style="display:inline-flex;gap:2px;background:#FFFFFF;border:1px solid #DCE5EA;border-radius:999px;padding:4px">
+              <sc-for list="{{ yearChips }}" as="p" hint-placeholder-count="2">
+                <button onClick="{{ p.onClick }}" style="font:inherit;font-weight:600;font-size:13px;border:none;padding:8px 18px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s;background:{{ p.bg }};color:{{ p.color }}">{{ p.label }}</button>
+              </sc-for>
+            </div>
+            <span style="font-size:12px;color:#6B8494">{{ gridHint }}</span>
+          </div>
+
+          <div style="background:#FFFFFF;border:1px solid #DCE5EA;border-radius:16px;padding:6px 18px 18px;animation:rmRise .35s ease both">
+            <div style="overflow-x:auto">
+              <table style="width:100%;border-collapse:collapse;table-layout:fixed;min-width:920px">
+                <thead><tr>
+                  <sc-for list="{{ gridCols }}" as="c" hint-placeholder-count="8">
+                    <th style="width:{{ c.width }};text-align:{{ c.align }};font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:{{ c.color }};font-weight:600;padding:14px 8px 10px;border-bottom:1px solid #DCE5EA;white-space:nowrap">{{ c.label }}</th>
+                  </sc-for>
+                </tr></thead>
+                <tbody>
+                  <sc-for list="{{ gridRows }}" as="r" hint-placeholder-count="18">
+                    <tr onClick="{{ r.onClick }}" style="cursor:{{ r.cursor }};transition:background .12s;background:{{ r.bg }}" style-hover="background:{{ r.hoverBg }}">
+                      <td style="padding:{{ r.labelPad }};border-bottom:{{ r.border }};border-top:{{ r.borderTop }};white-space:nowrap">
+                        <span style="font-size:{{ r.labelSize }};font-weight:{{ r.labelWeight }};letter-spacing:{{ r.labelSpacing }};text-transform:{{ r.labelTransform }};color:{{ r.labelColor }}">{{ r.label }}</span>
+                        <span style="font-size:11px;color:#6B8494;margin-left:8px">{{ r.unit }}</span>
+                      </td>
+                      <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="6">
+                        <td style="padding:{{ r.labelPad }};border-bottom:{{ r.border }};border-top:{{ r.borderTop }};text-align:right;font-size:{{ c.size }};font-weight:{{ c.weight }};color:{{ c.color }};font-variant-numeric:tabular-nums;white-space:nowrap;background:{{ c.bg }}">{{ c.text }}</td>
+                      </sc-for>
+                      <td style="padding:{{ r.labelPad }};border-bottom:{{ r.border }};border-top:{{ r.borderTop }};text-align:right;white-space:nowrap">
+                        <span style="font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;color:{{ r.deltaColor }};background:{{ r.deltaBg }}">{{ r.delta }}</span>
+                      </td>
+                      <td style="padding:{{ r.labelPad }};border-bottom:{{ r.border }};border-top:{{ r.borderTop }}">
+                        <sc-if value="{{ r.hasTrend }}" hint-placeholder-val="{{ false }}">
+                          <div style="display:flex;align-items:flex-end;gap:3px;height:20px;justify-content:flex-end">
+                            <sc-for list="{{ r.trend }}" as="t" hint-placeholder-count="4">
+                              <div title="{{ t.title }}" style="width:9px;border-radius:2px;background:{{ t.color }};height:{{ t.h }}"></div>
+                            </sc-for>
+                          </div>
+                        </sc-if>
+                      </td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div style="font-size:11px;color:#6B8494">Notoriété relevée par vague trimestrielle (institut indépendant) ; les autres lignes sont agrégées depuis le quotidien. « — » signale une vague non encore livrée. Cliquer une ligne ouvre le prisme correspondant.</div>
+        </div>
+      </sc-if>
+
+      <!-- ══════════ VUE 2 — DÉTAIL DES ACTIONS ══════════ -->
+      <sc-if value="{{ isActions }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+            <div style="display:inline-flex;gap:2px;background:#FFFFFF;border:1px solid #DCE5EA;border-radius:999px;padding:4px">
+              <sc-for list="{{ prismChips }}" as="p" hint-placeholder-count="3">
+                <button onClick="{{ p.onClick }}" style="font:inherit;font-weight:600;font-size:13px;border:none;padding:8px 18px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s;background:{{ p.bg }};color:{{ p.color }}">{{ p.label }}</button>
+              </sc-for>
+            </div>
+            <span style="font-size:12px;color:#6B8494">{{ prismHint }}</span>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <sc-for list="{{ tables }}" as="tb" hint-placeholder-count="2">
+              <div style="background:#FFFFFF;border:1px solid #DCE5EA;border-radius:16px;padding:18px;min-width:0;animation:rmRise .35s ease both">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <h3 style="font-size:14px;font-weight:600;margin:0">{{ tb.title }}</h3>
+                    <span style="font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:999px;color:{{ tb.badgeColor }};background:{{ tb.badgeBg }}">{{ tb.badge }}</span>
+                  </div>
+                  <span style="font-size:11px;color:#6B8494">{{ tb.sub }}</span>
+                </div>
+                <sc-if value="{{ tb.isEmpty }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:34px 10px;text-align:center">
+                    <div style="font-size:14px;font-weight:600;color:#12232E">Rien à afficher</div>
+                    <div style="font-size:12px;color:#6B8494;margin-top:4px">Aucun canal ne correspond aux filtres actifs.</div>
+                    <button onClick="{{ onResetFilters }}" style="font:inherit;margin-top:12px;font-size:12px;font-weight:600;padding:7px 14px;border-radius:999px;border:1.5px solid #C6D3DC;background:#FFFFFF;color:#0F2A48;cursor:pointer" style-hover="border-color:#0F2A48;background:#EDF2F1">Réinitialiser les filtres</button>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ tb.hasRows }}" hint-placeholder-val="{{ true }}">
+                  <div style="overflow-x:auto">
+                    <table style="width:100%;border-collapse:collapse;table-layout:fixed;min-width:{{ tb.minW }}">
+                      <thead><tr>
+                        <sc-for list="{{ tb.cols }}" as="c" hint-placeholder-count="7">
+                          <th onClick="{{ c.onClick }}" title="{{ c.title }}" style="width:{{ c.width }};text-align:{{ c.align }};font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:{{ c.color }};font-weight:600;padding:8px;border-bottom:1px solid #DCE5EA;white-space:nowrap;cursor:pointer;user-select:none" style-hover="color:#0F2A48">{{ c.label }}<span style="color:#0F2A48">{{ c.arrow }}</span></th>
+                        </sc-for>
+                      </tr></thead>
+                      <tbody>
+                        <sc-for list="{{ tb.rows }}" as="r" hint-placeholder-count="7">
+                          <tr onClick="{{ r.onClick }}" style="cursor:pointer;transition:background .12s" style-hover="background:#F0F5F4">
+                            <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="7">
+                              <td style="padding:{{ c.pad }};border-bottom:{{ r.border }};text-align:{{ c.align }};font-size:13px;font-weight:{{ c.weight }};color:{{ c.color }};font-variant-numeric:tabular-nums;white-space:nowrap">
+                                <div style="display:flex;align-items:center;gap:8px;justify-content:{{ c.justify }}">
+                                  <sc-if value="{{ c.hasDot }}" hint-placeholder-val="{{ false }}"><span style="width:8px;height:8px;border-radius:50%;background:{{ c.dotColor }};flex:none"></span></sc-if>
+                                  <span>{{ c.text }}</span>
+                                </div>
+                                <sc-if value="{{ c.hasBar }}" hint-placeholder-val="{{ false }}">
+                                  <div style="height:3px;border-radius:2px;background:#EDF2F1;margin-top:5px"><div style="height:3px;border-radius:2px;background:{{ c.barColor }};width:{{ c.barW }}"></div></div>
+                                </sc-if>
+                              </td>
+                            </sc-for>
+                          </tr>
+                        </sc-for>
+                        <tr>
+                          <sc-for list="{{ tb.totals }}" as="c" hint-placeholder-count="7">
+                            <td style="padding:11px 8px;border-top:2px solid #DCE5EA;text-align:{{ c.align }};font-size:13px;font-weight:700;color:{{ c.color }};font-variant-numeric:tabular-nums;white-space:nowrap">{{ c.text }}</td>
+                          </sc-for>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="font-size:11px;color:#6B8494;margin-top:12px">Les cellules « — » signalent une métrique non disponible pour ce canal (ex. pas de clic mesurable en OOH). Aucune valeur n'est estimée.</div>
+        </div>
+      </sc-if>
+
+      <!-- ══════════ VUE 3 — MIX MARKETING MODEL ══════════ -->
+      <sc-if value="{{ isMmm }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <div style="display:inline-flex;gap:2px;background:#FFFFFF;border:1px solid #DCE5EA;border-radius:999px;padding:4px">
+              <sc-for list="{{ metricChips }}" as="p" hint-placeholder-count="3">
+                <button onClick="{{ p.onClick }}" style="font:inherit;font-weight:600;font-size:13px;border:none;padding:8px 18px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s;background:{{ p.bg }};color:{{ p.color }}">{{ p.label }}</button>
+              </sc-for>
+            </div>
+            <span style="font-size:12px;color:#6B8494">{{ mmmHint }}</span>
+          </div>
+
+          <div style="background:#FFFFFF;border:1px solid #DCE5EA;border-radius:16px;padding:18px;animation:rmRise .35s ease both">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:6px">
+              <h3 style="font-size:14px;font-weight:600;margin:0">{{ chartTitle }}</h3>
+              <span style="font-size:11px;color:#6B8494">Empilement par canal · {{ bucketLabel }}</span>
+            </div>
+            <svg viewBox="0 0 1000 280" preserveAspectRatio="none" style="width:100%;height:280px;display:block">
+              <sc-for list="{{ chartGrid }}" as="g" hint-placeholder-count="4">
+                <line x1="{{ g.x1 }}" x2="{{ g.x2 }}" y1="{{ g.y }}" y2="{{ g.y }}" stroke="#EDF2F1" stroke-width="1"></line>
+              </sc-for>
+              <sc-for list="{{ chartBars }}" as="b" hint-placeholder-count="60">
+                <rect x="{{ b.x }}" y="{{ b.y }}" width="{{ b.w }}" height="{{ b.h }}" fill="{{ b.color }}"></rect>
+              </sc-for>
+            </svg>
+            <div style="display:flex;justify-content:space-between;margin-top:2px">
+              <sc-for list="{{ chartXLabels }}" as="x" hint-placeholder-count="7">
+                <span style="font-size:10px;color:#6B8494;font-variant-numeric:tabular-nums">{{ x.text }}</span>
+              </sc-for>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid #DCE5EA">
+              <sc-for list="{{ legend }}" as="l" hint-placeholder-count="12">
+                <span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#47606E"><span style="width:8px;height:8px;border-radius:2px;background:{{ l.color }}"></span>{{ l.name }}</span>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:#FFFFFF;border:1px solid #DCE5EA;border-radius:16px;padding:18px;animation:rmRise .4s ease both">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px">
+              <h3 style="font-size:14px;font-weight:600;margin:0">Matrice canaux × temps</h3>
+              <span style="font-size:11px;color:#6B8494">Intensité normalisée par ligne · {{ bucketLabel }}</span>
+            </div>
+            <div style="overflow-x:auto">
+              <div style="min-width:760px">
+                <sc-for list="{{ heatRows }}" as="row" hint-placeholder-count="12">
+                  <div style="display:grid;grid-template-columns:{{ heatCols }};gap:2px;align-items:center;margin-bottom:2px">
+                    <button onClick="{{ row.onClick }}" style="font:inherit;text-align:left;border:none;background:none;cursor:pointer;display:flex;align-items:center;gap:7px;padding:0 8px 0 0;min-width:0" style-hover="color:#0F2A48">
+                      <span style="width:8px;height:8px;border-radius:2px;background:{{ row.color }};flex:none"></span>
+                      <span style="font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ row.name }}</span>
+                    </button>
+                    <sc-for list="{{ row.cells }}" as="c" hint-placeholder-count="40">
+                      <div title="{{ c.title }}" style="height:18px;border-radius:3px;background:{{ c.bg }}"></div>
+                    </sc-for>
+                  </div>
+                </sc-for>
+                <div style="display:grid;grid-template-columns:{{ heatCols }};gap:2px;margin-top:6px">
+                  <span></span>
+                  <sc-for list="{{ heatAxis }}" as="a" hint-placeholder-count="40">
+                    <span style="font-size:9px;color:#6B8494;text-align:center;overflow:hidden;white-space:nowrap">{{ a.text }}</span>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:14px">
+              <span style="font-size:11px;color:#6B8494">Faible</span>
+              <sc-for list="{{ heatScale }}" as="s" hint-placeholder-count="6">
+                <span style="width:26px;height:10px;border-radius:2px;background:{{ s.bg }}"></span>
+              </sc-for>
+              <span style="font-size:11px;color:#6B8494">Élevé</span>
+              <span style="font-size:11px;color:#6B8494;margin-left:10px">Les lignes sans données restent vides (métrique non disponible).</span>
+            </div>
+          </div>
+
+          <div style="background:#FFFFFF;border:1px solid #DCE5EA;border-radius:16px;padding:18px;animation:rmRise .45s ease both">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px">
+              <h3 style="font-size:14px;font-weight:600;margin:0">Détail par canal</h3>
+              <button onClick="{{ onExportCsv }}" style="font:inherit;font-size:12px;font-weight:600;padding:7px 13px;border-radius:999px;border:1.5px solid #C6D3DC;background:#FFFFFF;color:#0F2A48;cursor:pointer" style-hover="border-color:#0F2A48;background:#EDF2F1">Exporter la table</button>
+            </div>
+            <div style="overflow-x:auto">
+              <table style="width:100%;border-collapse:collapse;min-width:860px">
+                <thead><tr>
+                  <sc-for list="{{ mmmTable.cols }}" as="c" hint-placeholder-count="8">
+                    <th onClick="{{ c.onClick }}" style="text-align:{{ c.align }};font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:{{ c.color }};font-weight:600;padding:8px;border-bottom:1px solid #DCE5EA;white-space:nowrap;cursor:pointer;user-select:none" style-hover="color:#0F2A48">{{ c.label }}<span style="color:#0F2A48">{{ c.arrow }}</span></th>
+                  </sc-for>
+                </tr></thead>
+                <tbody>
+                  <sc-for list="{{ mmmTable.rows }}" as="r" hint-placeholder-count="12">
+                    <tr onClick="{{ r.onClick }}" style="cursor:pointer;transition:background .12s" style-hover="background:#F0F5F4">
+                      <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="8">
+                        <td style="padding:{{ c.pad }};border-bottom:{{ r.border }};text-align:{{ c.align }};font-size:13px;font-weight:{{ c.weight }};color:{{ c.color }};font-variant-numeric:tabular-nums;white-space:nowrap">
+                          <div style="display:flex;align-items:center;gap:8px;justify-content:{{ c.justify }}">
+                            <sc-if value="{{ c.hasDot }}" hint-placeholder-val="{{ false }}"><span style="width:8px;height:8px;border-radius:50%;background:{{ c.dotColor }};flex:none"></span></sc-if>
+                            <span>{{ c.text }}</span>
+                          </div>
+                        </td>
+                      </sc-for>
+                    </tr>
+                  </sc-for>
+                  <tr>
+                    <sc-for list="{{ mmmTable.totals }}" as="c" hint-placeholder-count="8">
+                      <td style="padding:11px 8px;border-top:2px solid #DCE5EA;text-align:{{ c.align }};font-size:13px;font-weight:700;color:{{ c.color }};font-variant-numeric:tabular-nums;white-space:nowrap">{{ c.text }}</td>
+                    </sc-for>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </main>
+
+  <!-- Drawer canal -->
+  <sc-if value="{{ drawerOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(15,42,72,.22);display:flex;justify-content:flex-end;z-index:40" onClick="{{ onCloseDrawer }}">
+      <div onClick="{{ stop }}" style="width:400px;max-width:92vw;background:#FFFFFF;height:100%;overflow-y:auto;padding:22px;border-left:1px solid #DCE5EA;animation:rmRise .2s ease both">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="width:10px;height:10px;border-radius:3px;background:{{ drawer.color }}"></span>
+              <h3 style="font-size:17px;font-weight:700;margin:0;letter-spacing:-.01em">{{ drawer.name }}</h3>
+            </div>
+            <div style="font-size:12px;color:#6B8494;margin-top:4px">{{ drawer.sub }}</div>
+          </div>
+          <button onClick="{{ onCloseDrawer }}" style="font:inherit;font-size:13px;border:1px solid #C6D3DC;background:#FFFFFF;color:#47606E;border-radius:8px;width:28px;height:28px;cursor:pointer;flex:none" style-hover="border-color:#0F2A48;color:#0F2A48">×</button>
+        </div>
+        <svg viewBox="0 0 360 80" preserveAspectRatio="none" style="width:100%;height:76px;display:block;margin:16px 0">
+          <path d="{{ drawer.sparkArea }}" fill="#E7EDF3"></path>
+          <path d="{{ drawer.spark }}" fill="none" stroke="{{ drawer.color }}" stroke-width="1.8" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path>
+        </svg>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <sc-for list="{{ drawer.stats }}" as="s" hint-placeholder-count="8">
+            <div style="border:1px solid #DCE5EA;border-radius:12px;padding:11px">
+              <span style="font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#6B8494;font-weight:600">{{ s.label }}</span>
+              <div style="font-size:18px;font-weight:700;margin-top:5px;line-height:1;font-variant-numeric:tabular-nums;color:{{ s.color }}">{{ s.value }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <button onClick="{{ drawer.onPrism }}" style="font:inherit;width:100%;margin-top:16px;font-size:13px;font-weight:600;padding:10px;border-radius:10px;border:none;background:#0F2A48;color:#FFFFFF;cursor:pointer" style-hover="background:#12232E">{{ drawer.cta }}</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toastOn }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;right:22px;bottom:22px;background:#0F2A48;color:#FFFFFF;padding:12px 16px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 6px 20px rgba(15,42,72,.22);animation:rmToast .2s ease both;z-index:60">{{ toastMsg }}</div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;brandName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Groupe Vialène&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;confortable&quot;,&quot;compact&quot;],&quot;default&quot;:&quot;confortable&quot;,&quot;tsType&quot;:&quot;'confortable' | 'compact'&quot;}}">
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    const rnd=a=>{let t=(a+0x6D2B79F5)|0;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;};
+
+    // ════════ MOCK DATA (remplaçable par le flux de production) ════════
+    this.CH=[
+      {id:'seo',n:'SEO',t:'hors',c:'#0E7C66',impr:145000,ctr:.038,bnc:41,dur:172,leads:5.5,close:.026,price:271000,dcom:118,g:1.22,cap:{impr:1,clicks:1,web:1,leads:1,budget:0}},
+      {id:'email',n:'Emailing',t:'hors',c:'#1F6FB2',impr:38000,ctr:.031,bnc:48,dur:118,leads:2.6,close:.031,price:264000,dcom:96,g:1.08,cap:{impr:1,clicks:1,web:1,leads:1,budget:0}},
+      {id:'rp',n:'RP',t:'hors',c:'#6C5CE0',impr:95000,ctr:0,bnc:52,dur:96,leads:.7,close:.022,price:288000,dcom:140,g:1.31,cap:{impr:1,clicks:0,web:1,leads:1,budget:0}},
+      {id:'sms',n:'SMS',t:'hors',c:'#2E9E8F',impr:12000,ctr:.072,bnc:55,dur:84,leads:1.1,close:.028,price:252000,dcom:88,g:.93,cap:{impr:1,clicks:1,web:1,leads:1,budget:0}},
+      {id:'cm',n:'Community management',t:'hors',c:'#B4823A',impr:60000,ctr:.014,bnc:58,dur:73,leads:.9,close:.017,price:259000,dcom:132,g:1.14,cap:{impr:1,clicks:1,web:1,leads:1,budget:0}},
+      {id:'ooh',n:'OOH',t:'paid',c:'#0F2A48',impr:1400000,ctr:0,leads:0,close:0,price:0,dcom:0,budget:1100,g:1.05,flight:[28,16],cap:{impr:1,clicks:0,web:0,leads:0,budget:1}},
+      {id:'dooh',n:'DOOH',t:'paid',c:'#35597A',impr:620000,ctr:0,leads:0,close:0,price:0,dcom:0,budget:520,g:1.34,flight:[21,12],cap:{impr:1,clicks:0,web:0,leads:0,budget:1}},
+      {id:'audio',n:'Audio digital',t:'paid',c:'#7A5C9E',impr:180000,ctr:0,leads:0,close:0,price:0,dcom:0,budget:260,g:1.18,flight:[21,10],cap:{impr:1,clicks:0,web:0,leads:0,budget:1}},
+      {id:'search',n:'Search',t:'paid',c:'#1D7F4F',impr:90000,ctr:.062,bnc:38,dur:186,leads:7,close:.029,price:268000,dcom:74,g:1.11,budget:900,cap:{impr:1,clicks:1,web:1,leads:1,budget:1}},
+      {id:'meta',n:'Meta',t:'paid',c:'#2563C9',impr:420000,ctr:.011,bnc:57,dur:92,leads:6.5,close:.019,price:256000,dcom:102,g:1.16,budget:750,cap:{impr:1,clicks:1,web:1,leads:1,budget:1}},
+      {id:'linkedin',n:'LinkedIn',t:'paid',c:'#17607F',impr:60000,ctr:.008,bnc:51,dur:104,leads:1.2,close:.034,price:312000,dcom:86,g:1.27,budget:220,cap:{impr:1,clicks:1,web:1,leads:1,budget:1}},
+      {id:'display',n:'Display',t:'paid',c:'#C2703D',impr:900000,ctr:.0009,bnc:68,dur:52,leads:1.8,close:.012,price:248000,dcom:151,g:.88,budget:380,cap:{impr:1,clicks:1,web:1,leads:1,budget:1}}
+    ];
+    this.PROGRAMS=[
+      {id:'aub',name:"Les Terrasses d'Aubépine",city:'Rennes (35)',lots:86,dispo:31,share:.26},
+      {id:'stm',name:'Carré Saint-Michel',city:'Nantes (44)',lots:64,dispo:19,share:.22},
+      {id:'hor',name:'Villa Horizon',city:'La Baule (44)',lots:32,dispo:7,share:.14},
+      {id:'vig',name:'Le Clos des Vignes',city:'Angers (49)',lots:58,dispo:28,share:.16},
+      {id:'riv',name:'Rive Neuve',city:'Saint-Nazaire (44)',lots:71,dispo:44,share:.14},
+      {id:'bel',name:'Domaine Belvédère',city:'Vannes (56)',lots:44,dispo:26,share:.08}
+    ];
+    this.CAMPAIGNS=[
+      {id:'c1',name:'Lancement Rive Neuve',chs:['search','meta','ooh','dooh','email','sms'],share:.34},
+      {id:'c2',name:'Notoriété marque — T2',chs:['ooh','dooh','audio','rp','cm'],share:.41},
+      {id:'c3',name:'Investisseurs LMNP',chs:['linkedin','search','email','display'],share:.19},
+      {id:'c4',name:'Portes ouvertes Aubépine',chs:['meta','sms','email','display','cm'],share:.23},
+      {id:'c5',name:'Toujours actif — SEO & marque',chs:['seo','search','rp'],share:.52}
+    ];
+    this.WAVES=[
+      {label:'T4 24',sp:9.2,as:31.4},{label:'T1 25',sp:10.1,as:33.8},{label:'T2 25',sp:11.6,as:35.2},
+      {label:'T3 25',sp:11.9,as:36.0},{label:'T4 25',sp:13.4,as:38.7},{label:'T1 26',sp:14.2,as:40.1},
+      {label:'T2 26',sp:15.8,as:42.6},{label:'T3 26',sp:16.9,as:44.3}
+    ];
+
+    const SEAS=[.95,1.04,1.13,1.06,1.0,.94,.8,.58,1.16,1.19,1.06,.82];
+    const N=730;
+    this.N=N;
+    this.DATES=[];
+    for(let i=0;i<N;i++){const d=new Date(2026,8,10);d.setDate(d.getDate()-(N-1-i));this.DATES.push(d);}
+    this.SER={};
+    this.CH.forEach((ch,ci)=>{
+      const arr=new Array(N);
+      for(let i=0;i<N;i++){
+        const d=this.DATES[i],we=d.getDay()===0||d.getDay()===6;
+        const wkf=we?(ch.cap.leads?.56:.94):1;
+        let f=SEAS[d.getMonth()]*wkf*(.85+.32*rnd(i*37+ci*211))*(i<365?1/ch.g:1)*(.94+.12*(i/N));
+        if(ch.flight&&((i+ci*5)%ch.flight[0])>=ch.flight[1]) f=0;
+        const impr=Math.round(ch.impr*f);
+        const clicks=ch.cap.clicks?Math.round(impr*ch.ctr):0;
+        const visits=ch.cap.web?(ch.cap.clicks?Math.round(clicks*.93):Math.round(impr*.0055)):0;
+        const leads=ch.cap.leads?Math.round(ch.leads*f*(.7+.6*rnd(i*13+ci*7))):0;
+        const sales=ch.cap.leads?leads*ch.close:0;
+        arr[i]={i:impr,c:clicks,v:visits,u:Math.round(visits*.79),l:leads,s:sales,ca:sales*ch.price,b:ch.budget?ch.budget*f:0};
+      }
+      this.SER[ch.id]=arr;
+    });
+    this.MIX={};
+    this.CH.forEach((ch,ci)=>{
+      const w=this.PROGRAMS.map((p,pi)=>p.share*(.55+.9*rnd(ci*53+pi*29)));
+      const s=w.reduce((a,b)=>a+b,0);
+      this.MIX[ch.id]={};
+      this.PROGRAMS.forEach((p,pi)=>{this.MIX[ch.id][p.id]=w[pi]/s;});
+    });
+
+    this.state={view:'comex',prism:'ads',metric:'leads',type:'all',program:'all',campaign:'all',period:'12m',
+      sortHors:{k:'leads',d:-1},sortPaid:{k:'leads',d:-1},sortMmm:{k:'impr',d:-1},channel:null,toast:'',loading:false};
+  }
+
+  componentWillUnmount(){ clearTimeout(this._t); clearTimeout(this._lt); }
+
+  flash(msg){ this.setState({toast:msg}); clearTimeout(this._t); this._t=setTimeout(()=>this.setState({toast:''}),2200); }
+  reload(patch){ this.setState(Object.assign({loading:true},patch)); clearTimeout(this._lt); this._lt=setTimeout(()=>this.setState({loading:false}),300); }
+
+  activeChannels(){
+    const S=this.state;
+    const camp=this.CAMPAIGNS.find(c=>c.id===S.campaign);
+    return this.CH.filter(ch=>(S.type==='all'||ch.t===S.type)&&(!camp||camp.chs.indexOf(ch.id)>=0));
+  }
+  factor(ch){
+    const S=this.state;
+    const camp=this.CAMPAIGNS.find(c=>c.id===S.campaign);
+    let f=1;
+    if(S.program!=='all') f*=this.MIX[ch.id][S.program];
+    if(camp) f*=camp.share;
+    return f;
+  }
+  sum(chs,from,to){
+    const out={};
+    chs.forEach(ch=>{
+      const a=this.SER[ch.id],f=this.factor(ch);
+      const o={impr:0,clicks:0,visits:0,uniq:0,leads:0,sales:0,ca:0,bud:0};
+      for(let i=from;i<=to;i++){const r=a[i];o.impr+=r.i;o.clicks+=r.c;o.visits+=r.v;o.uniq+=r.u;o.leads+=r.l;o.sales+=r.s;o.ca+=r.ca;o.bud+=r.b;}
+      Object.keys(o).forEach(k=>{o[k]*=f;});
+      out[ch.id]=o;
+    });
+    return out;
+  }
+  grand(map,chs,key,capKey){
+    let v=0;
+    chs.forEach(ch=>{ if(!capKey||ch.cap[capKey]) v+=map[ch.id][key]; });
+    return v;
+  }
+  series(chs,from,to,key,nb){
+    const n=to-from+1,size=Math.max(1,Math.ceil(n/nb)),out=[];
+    for(let i=from;i<=to;i+=size){
+      let v=0;
+      for(let j=i;j<Math.min(i+size,to+1);j++) chs.forEach(ch=>{v+=this.SER[ch.id][j][key]*this.factor(ch);});
+      out.push(v);
+    }
+    return out;
+  }
+
+  renderVals(){
+    const S=this.state,me=this;
+    const NB=(n)=>String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,'\u202F');
+    const DEC=(n,d)=>(Math.round(n*Math.pow(10,d))/Math.pow(10,d)).toFixed(d).replace('.',',');
+    const K=n=>n>=1e6?DEC(n/1e6,1)+' M':n>=1e4?DEC(n/1e3,0)+' k':NB(n);
+    const EUR=n=>NB(n)+' €';
+    const EURK=n=>n>=1e6?DEC(n/1e6,2)+' M€':n>=1e3?DEC(n/1e3,0)+' k€':NB(n)+' €';
+    const DASH='—';
+    const chip=(cur,prev)=>{
+      if(!prev) return {text:'n/a',color:'#6B8494',bg:'#EDF2F1'};
+      const p=(cur-prev)/prev*100;
+      return p>=0.5?{text:'+'+DEC(p,1)+' %',color:'#16A34A',bg:'#E9FBEF'}
+        :p<=-0.5?{text:DEC(p,1)+' %',color:'#DC2626',bg:'#FDECEC'}
+        :{text:'= 0 %',color:'#6B8494',bg:'#EDF2F1'};
+    };
+    const sparkPath=(vals,w,h)=>{
+      if(!vals.length) return {line:'',area:''};
+      const mx=Math.max.apply(null,vals),mn=Math.min.apply(null,vals),rg=(mx-mn)||1;
+      const pts=vals.map((v,i)=>[vals.length===1?w/2:i/(vals.length-1)*w,h-2-(v-mn)/rg*(h-6)]);
+      const line='M'+pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L');
+      return {line,area:line+' L'+w+','+h+' L0,'+h+' Z'};
+    };
+
+    const days={'30j':30,'90j':90,'6m':182,'12m':365}[S.period]||365;
+    const to=this.N-1,from=this.N-days,pTo=to-365,pFrom=from-365;
+    const chs=this.activeChannels();
+    const cur=this.sum(chs,from,to),prev=this.sum(chs,pFrom,pTo);
+    const fmtD=d=>String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getFullYear()).slice(2);
+    const rangeLabel=fmtD(this.DATES[from])+' → '+fmtD(this.DATES[to])+'  ·  vs N-1';
+
+    // Accesseurs de STOCK — point dans le temps, partagés par la vue COMEX et la grille trimestrielle
+    const cumAt=(key,idx)=>{
+      if(idx<0) return 0;
+      let v=0;
+      chs.forEach(ch=>{const a=me.SER[ch.id],f=me.factor(ch);let s=0;for(let i=0;i<=idx;i++)s+=a[i][key];v+=s*f;});
+      return v;
+    };
+    const stockCRM=idx=>9800+cumAt('l',idx)*0.74;
+    const stockSocial=idx=>34600+cumAt('i',idx)/98000;
+    const avisNoteAt=idx=>4.18+Math.min(.52,cumAt('s',idx)/1400);
+    const avisVolAt=idx=>180+cumAt('s',idx)*1.55;
+    const seoTop3At=idx=>12+cumAt('v',idx)/420000;
+    const progCountAt=idx=>Math.max(1,Math.round((S.program==='all'?me.PROGRAMS.length:1)+(me.N-1-idx)/430));
+    const lotsAt=idx=>(S.program==='all'?me.PROGRAMS:me.PROGRAMS.filter(p=>p.id===S.program))
+      .reduce((a,p)=>a+p.dispo,0)+Math.round((me.N-1-idx)/730*118);
+
+    const nav=[
+      {k:'comex',label:'Synthèse COMEX',sub:'Branding × commercial'},
+      {k:'grid',label:'Synthèse trimestrielle',sub:'Lecture tableau T1 → T4'},
+      {k:'actions',label:'Actions marketing',sub:'3 prismes, hors paid / paid'},
+      {k:'mmm',label:'Mix marketing',sub:'Comparaison quotidienne'}
+    ];
+    const navItems=nav.map(n=>({label:n.label,sub:n.sub,onClick:()=>me.setState({view:n.k}),
+      bg:S.view===n.k?'#E7EDF3':'transparent',color:S.view===n.k?'#0F2A48':'#47606E',
+      subColor:S.view===n.k?'#47606E':'#6B8494'}));
+
+    const mkChips=(list,active,fn)=>list.map(o=>({label:o.l,onClick:()=>fn(o.k),
+      bg:active===o.k?'#0F2A48':'#FFFFFF',color:active===o.k?'#FFFFFF':'#47606E',
+      border:active===o.k?'#0F2A48':'#C6D3DC'}));
+    const periodChips=mkChips([{k:'30j',l:'30 j'},{k:'90j',l:'90 j'},{k:'6m',l:'6 mois'},{k:'12m',l:'12 mois'}],S.period,k=>me.reload({period:k}));
+    const typeChips=mkChips([{k:'all',l:'Tous'},{k:'hors',l:'Hors paid'},{k:'paid',l:'Paid'}],S.type,k=>me.reload({type:k}));
+
+    // ══════ VUE 1 ══════
+    const tImpr=this.grand(cur,chs,'impr'),pImpr=this.grand(prev,chs,'impr');
+    const tBud=this.grand(cur,chs,'bud'),pBud=this.grand(prev,chs,'bud');
+    const tLeads=this.grand(cur,chs,'leads'),pLeads=this.grand(prev,chs,'leads');
+    const tSales=this.grand(cur,chs,'sales'),pSales=this.grand(prev,chs,'sales');
+    const tCa=this.grand(cur,chs,'ca'),pCa=this.grand(prev,chs,'ca');
+    const tVis=this.grand(cur,chs,'visits'),pVis=this.grand(prev,chs,'visits');
+    const odv=tImpr*0.62, pOdv=pImpr*0.62;
+    const goPrism=p=>me.setState({view:'actions',prism:p});
+
+    const wMax=50;
+    const waves=this.WAVES.slice(-6).map(w=>({label:w.label,
+      spontH:Math.round(w.sp/wMax*110)+'px',assistH:Math.round(w.as/wMax*110)+'px',
+      spontTitle:'Spontanée '+DEC(w.sp,1)+' %',assistTitle:'Assistée '+DEC(w.as,1)+' %'}));
+    const lastW=this.WAVES[this.WAVES.length-1],prevW=this.WAVES[this.WAVES.length-5];
+    const notoKpis=[
+      {label:'Notoriété spontanée',value:DEC(lastW.sp,1)+' %',delta:'+'+DEC(lastW.sp-prevW.sp,1)+' pts',deltaColor:'#16A34A',sub:'vague T3 2026 vs T3 2025'},
+      {label:'Notoriété assistée',value:DEC(lastW.as,1)+' %',delta:'+'+DEC(lastW.as-prevW.as,1)+' pts',deltaColor:'#16A34A',sub:'vague T3 2026 vs T3 2025'}
+    ];
+
+    const mkKpi=(label,value,c,sub,onClick)=>({label,value,sub:sub||'',delta:c.text,deltaColor:c.color,deltaBg:c.bg,onClick:onClick||(()=>{})});
+    const pressionKpis=[
+      mkKpi('ODV',K(odv),chip(odv,pOdv),'occasions de voir',()=>goPrism('ads')),
+      mkKpi('Impressions',K(tImpr),chip(tImpr,pImpr),'tous canaux',()=>goPrism('ads')),
+      mkKpi('Budget média',EURK(tBud),chip(tBud,pBud),'paid uniquement',()=>goPrism('ads'))
+    ];
+    const paidChs=chs.filter(c=>c.t==='paid');
+    const budTot=paidChs.reduce((a,c)=>a+cur[c.id].bud,0)||1;
+    const pressionMix=paidChs.map(c=>({label:c.n,color:c.c,w:(cur[c.id].bud/budTot*100).toFixed(1)+'%',
+      title:c.n+' — '+EURK(cur[c.id].bud)}));
+
+    const contacts=stockCRM(to),abonnes=stockSocial(to);
+    const avisNote=avisNoteAt(to),avisVol=avisVolAt(to),seoTop3=seoTop3At(to);
+    const tiersKpis=[
+      mkKpi('Contacts CRM',NB(contacts),chip(contacts,stockCRM(pTo)),'base active',()=>goPrism('crm')),
+      mkKpi('Abonnés réseaux',NB(abonnes),chip(abonnes,stockSocial(pTo)),'6 comptes',()=>goPrism('ads')),
+      mkKpi('Trafic site',K(tVis),chip(tVis,pVis),'sessions',()=>goPrism('analytics')),
+      mkKpi('Avis Google',DEC(avisNote,1)+' / 5',chip(avisNote,avisNoteAt(pTo)),NB(avisVol)+' avis',()=>goPrism('crm')),
+      mkKpi('SEO — top 3',NB(seoTop3),chip(seoTop3,seoTop3At(pTo)),'mots-clés',()=>goPrism('analytics'))
+    ];
+
+    const progsShown=S.program==='all'?this.PROGRAMS:this.PROGRAMS.filter(p=>p.id===S.program);
+    const offreKpis=[
+      {label:'Programmes à la vente',value:NB(progsShown.length),sub:'sur 9 au portefeuille'},
+      {label:'Biens à la vente',value:NB(progsShown.reduce((a,p)=>a+p.dispo,0)),sub:'sur '+NB(progsShown.reduce((a,p)=>a+p.lots,0))+' lots'}
+    ];
+    const nbSpark=26;
+    const sLeads=this.series(chs,from,to,'l',nbSpark),sSales=this.series(chs,from,to,'s',nbSpark),sCa=this.series(chs,from,to,'ca',nbSpark);
+    const sp1=sparkPath(sLeads,220,44),sp2=sparkPath(sSales,220,44),sp3=sparkPath(sCa,220,44);
+    const convKpis=[
+      Object.assign(mkKpi('Leads reçus',NB(tLeads),chip(tLeads,pLeads),'vs N-1',()=>goPrism('crm')),{spark:sp1.line,sparkArea:sp1.area}),
+      Object.assign(mkKpi('Ventes',NB(tSales),chip(tSales,pSales),'actées',()=>goPrism('crm')),{spark:sp2.line,sparkArea:sp2.area}),
+      Object.assign(mkKpi('CA généré',EURK(tCa),chip(tCa,pCa),'HT',()=>goPrism('crm')),{spark:sp3.line,sparkArea:sp3.area})
+    ];
+    const progCols=[{label:'Programme',align:'left'},{label:'Lots dispo.',align:'right'},{label:'Leads',align:'right'},{label:'Ventes',align:'right'},{label:'CA',align:'right'},{label:'Écoulement',align:'right'}];
+    const progRows=progsShown.map((p,i)=>{
+      let leads=0,sales=0,ca=0;
+      chs.forEach(ch=>{const share=S.program==='all'?me.MIX[ch.id][p.id]:1;leads+=cur[ch.id].leads*share;sales+=cur[ch.id].sales*share;ca+=cur[ch.id].ca*share;});
+      const ecoul=(p.lots-p.dispo)/p.lots*100;
+      return {name:p.name,city:p.city,lots:NB(p.dispo)+' / '+NB(p.lots),leads:NB(leads),sales:NB(sales),ca:EURK(ca),
+        ecoul:DEC(ecoul,0)+' %',ecoulW:ecoul.toFixed(0)+'%',
+        border:i===progsShown.length-1?'none':'1px solid #DCE5EA',
+        onClick:()=>me.reload({program:p.id,view:'actions',prism:'crm'})};
+    });
+
+    // ══════ VUE 1b — grille trimestrielle ══════
+    const gYear=S.year||2026;
+    const qRanges=[1,2,3,4].map(q=>{
+      const a=new Date(gYear,(q-1)*3,1),b=new Date(gYear,q*3,0);
+      let fi=-1,ti=-1;
+      for(let i=0;i<me.N;i++){const d=me.DATES[i];if(d>=a&&d<=b){if(fi<0)fi=i;ti=i;}}
+      const full=fi>=0&&me.DATES[ti].getDate()===b.getDate()&&me.DATES[ti].getMonth()===b.getMonth();
+      return {q,label:'T'+q,from:fi,to:ti,ok:fi>=0,partial:fi>=0&&!full,
+        pFrom:fi>=0?fi-365:-1,pTo:ti>=0?ti-365:-1};
+    });
+    const qSums=qRanges.map(r=>r.ok?me.sum(chs,r.from,r.to):null);
+    const qPrev=qRanges.map(r=>r.ok&&r.pFrom>=0?me.sum(chs,r.pFrom,r.pTo):null);
+    const yearChips=[2025,2026].map(y=>({label:String(y),onClick:()=>me.setState({year:y}),
+      bg:gYear===y?'#0F2A48':'transparent',color:gYear===y?'#FFFFFF':'#47606E'}));
+    const gridHint='Trimestres civils '+gYear+' · dernière colonne : évolution vs même trimestre N-1';
+    const gridCols=[{label:'Indicateur',align:'left',width:'270px',color:'#6B8494'}]
+      .concat(qRanges.map(r=>({label:r.label+(r.partial?' *':''),align:'right',width:'auto',color:'#0F2A48'})))
+      .concat([{label:'Cumul '+gYear,align:'right',width:'auto',color:'#0F2A48'},
+               {label:'vs N-1',align:'right',width:'104px',color:'#6B8494'},
+               {label:'Tendance',align:'right',width:'72px',color:'#6B8494'}]);
+
+    const waveFor=(q,y)=>me.WAVES.find(w=>w.label==='T'+q+' '+String(y).slice(2));
+    const progSel=S.program==='all'?me.PROGRAMS:me.PROGRAMS.filter(p=>p.id===S.program);
+    const gm=[
+      {group:'Branding'},
+      {sub:'Notoriété',source:'institut indépendant'},
+      {label:'TOM',unit:'notoriété spontanée, %',prism:'ads',
+        get:(q)=>{const w=waveFor(q,gYear);return w?w.sp:null;},
+        prevGet:(q)=>{const w=waveFor(q,gYear-1);return w?w.sp:null;},
+        fmt:v=>DEC(v,1)+' %',agg:'avg',pts:true},
+      {label:'Notoriété assistée',unit:'%',prism:'ads',
+        get:(q)=>{const w=waveFor(q,gYear);return w?w.as:null;},
+        prevGet:(q)=>{const w=waveFor(q,gYear-1);return w?w.as:null;},
+        fmt:v=>DEC(v,1)+' %',agg:'avg',pts:true},
+      {sub:'Pression ads',source:'régies'},
+      {label:'ODV',unit:'occasions de voir',prism:'ads',metric:m=>me.grand(m,chs,'impr')*0.62,fmt:K},
+      {label:'Impressions',unit:'',prism:'ads',metric:m=>me.grand(m,chs,'impr'),fmt:K},
+      {label:'Budget',unit:'média paid',prism:'ads',metric:m=>me.grand(m,chs,'bud'),fmt:EURK},
+      {sub:'Data 1er party',source:'CRM, social, analytics'},
+      {label:'Taille CRM',unit:'contacts actifs, fin de trimestre',prism:'crm',
+        at:stockCRM,fmt:NB,agg:'last'},
+      {label:'Taille social',unit:'abonnés cumulés, fin de trimestre',prism:'ads',
+        at:stockSocial,fmt:NB,agg:'last'},
+      {label:'Trafic site / LP',unit:'sessions',prism:'analytics',metric:m=>me.grand(m,chs,'visits'),fmt:K},
+      {label:'Avis Google',unit:'note moyenne, fin de trimestre',prism:'crm',
+        at:avisNoteAt,fmt:v=>DEC(v,2)+' / 5',agg:'last',pts:true},
+      {label:'Positionnement SEO',unit:'mots-clés en top 3, fin de trimestre',prism:'analytics',
+        at:seoTop3At,fmt:NB,agg:'last'},
+      {group:'Performance'},
+      {sub:'Offre',source:'CRM'},
+      {label:'Nb programmes',unit:'à la vente, fin de trimestre',prism:'crm',
+        at:progCountAt,fmt:NB,agg:'last'},
+      {label:'Nb biens',unit:'lots disponibles, fin de trimestre',prism:'crm',
+        at:lotsAt,fmt:NB,agg:'last'},
+      {sub:'Conversion',source:'CRM'},
+      {label:'Nb leads',unit:'',prism:'crm',metric:m=>me.grand(m,chs,'leads'),fmt:NB},
+      {label:'Nb ventes',unit:'actées',prism:'crm',metric:m=>me.grand(m,chs,'sales'),fmt:NB},
+      {label:'CA',unit:'HT',prism:'crm',metric:m=>me.grand(m,chs,'ca'),fmt:EURK}
+    ];
+    const gridRows=gm.map(r=>{
+      const blank={cells:qRanges.map(()=>({text:'',size:'13px',weight:'400',color:'#12232E',bg:'transparent'}))
+        .concat([{text:'',size:'13px',weight:'700',color:'#12232E',bg:'#F6FAF9'}]),
+        delta:'',deltaColor:'#6B8494',deltaBg:'transparent',hasTrend:false,trend:[],
+        onClick:()=>{},cursor:'default',unit:'',border:'none',borderTop:'none',
+        labelPad:'9px 8px',labelSize:'13px',labelWeight:'400',labelSpacing:'0',labelTransform:'none',
+        labelColor:'#12232E',bg:'transparent',hoverBg:'transparent'};
+      if(r.group) return Object.assign(blank,{label:r.group,bg:'#F0F5F4',hoverBg:'#F0F5F4',
+        labelPad:'11px 8px',labelSize:'11px',labelWeight:'700',labelSpacing:'.09em',
+        labelTransform:'uppercase',labelColor:'#0F2A48',borderTop:'1px solid #DCE5EA'});
+      if(r.sub) return Object.assign(blank,{label:r.sub,unit:r.source,labelPad:'10px 8px',
+        labelSize:'12px',labelWeight:'700',labelColor:'#47606E',hoverBg:'transparent'});
+      const vals=qRanges.map((q,i)=>{
+        if(!q.ok) return null;
+        return r.at?r.at(q.to):r.metric?r.metric(qSums[i],i):r.get(q.q);
+      });
+      const pvals=qRanges.map((q,i)=>{
+        if(r.prevGet) return r.prevGet(q.q);
+        if(r.at) return q.ok&&q.pTo>=0?r.at(q.pTo):null;
+        if(!qPrev[i]) return null;
+        return r.metric?r.metric(qPrev[i],i):null;
+      });
+      const known=vals.filter(v=>v!==null&&v!==undefined);
+      const agg=r.agg||'sum';
+      const total=!known.length?null:agg==='sum'?known.reduce((a,b)=>a+b,0)
+        :agg==='avg'?known.reduce((a,b)=>a+b,0)/known.length:known[known.length-1];
+      const pk=pvals.filter(v=>v!==null&&v!==undefined);
+      const ptotal=!pk.length?null:agg==='sum'?pk.reduce((a,b)=>a+b,0)
+        :agg==='avg'?pk.reduce((a,b)=>a+b,0)/pk.length:pk[pk.length-1];
+      let d={text:'—',color:'#A8BBC6',bg:'transparent'};
+      if(total!==null&&ptotal!==null&&ptotal!==0){
+        if(r.pts){const g=total-ptotal;
+          d={text:(g>=0?'+':'')+DEC(g,1)+' pts',color:g>=0.05?'#16A34A':g<=-0.05?'#DC2626':'#6B8494',
+            bg:g>=0.05?'#E9FBEF':g<=-0.05?'#FDECEC':'#EDF2F1'};}
+        else d=chip(total,ptotal);
+      }
+      const mx=Math.max.apply(null,known.concat([0]));
+      const mn=Math.min.apply(null,known.concat([mx]));
+      return Object.assign(blank,{
+        label:r.label,unit:r.unit,border:'1px solid #DCE5EA',
+        onClick:()=>me.setState({view:'actions',prism:r.prism}),cursor:'pointer',hoverBg:'#F6FAF9',
+        cells:vals.map(v=>({text:v===null||v===undefined?'—':r.fmt(v),size:'13px',weight:'400',
+          color:v===null||v===undefined?'#A8BBC6':'#12232E',bg:'transparent'}))
+          .concat([{text:total===null?'—':r.fmt(total),size:'13px',weight:'700',
+            color:total===null?'#A8BBC6':'#12232E',bg:'#F6FAF9'}]),
+        delta:d.text,deltaColor:d.color,deltaBg:d.bg,
+        hasTrend:known.length>1,
+        trend:vals.map((v,i)=>({h:v===null||v===undefined?'2px':Math.max(3,Math.round((mx===mn?.6:(v-mn*0.85)/(mx-mn*0.85))*20))+'px',
+          color:v===null||v===undefined?'#EDF2F1':'#8FB3C7',
+          title:qRanges[i].label+' · '+(v===null||v===undefined?'non disponible':r.fmt(v))}))
+      });
+    });
+
+    // ══════ VUE 2 ══════
+    const pad=this.props.density==='compact'?'7px 8px':'9px 8px';
+    const metrics=(ch)=>{
+      const o=cur[ch.id],p=prev[ch.id];
+      const has=ch.cap;
+      return {
+        ch,o,p,
+        impr:has.impr?o.impr:null,
+        clicks:has.clicks?o.clicks:null,
+        visits:has.web?o.visits:null,
+        uniq:has.web?o.uniq:null,
+        bnc:has.web?ch.bnc:null,
+        dur:has.web?ch.dur:null,
+        leads:has.leads?o.leads:null,
+        sales:has.leads?o.sales:null,
+        ca:has.leads?o.ca:null,
+        bud:has.budget?o.bud:null,
+        cpm:has.budget&&o.impr?o.bud/o.impr*1000:null,
+        cpl:has.budget&&has.leads&&o.leads?o.bud/o.leads:null,
+        cpa:has.budget&&has.leads&&o.sales?o.bud/o.sales:null,
+        cpv:has.budget&&has.web&&o.visits?o.bud/o.visits:null,
+        dcom:has.leads?ch.dcom:null,
+        roi:has.budget&&has.leads&&o.bud?(o.ca*0.17-o.bud)/o.bud*100:null,
+        roas:has.budget&&has.leads&&o.bud?o.ca/o.bud:null
+      };
+    };
+    const PRISMS={
+      ads:{label:'Ads-centric',hint:'Pression et coût média — source régies publicitaires',minW:'640px',
+        cols:[['name','Canal','left'],['impr','Impressions','right'],['clicks','Clics','right'],['leads','Leads','right'],['bud','Budget','right'],['cpm','CPM','right'],['cpl','CPL','right'],['cpa','CPA','right']],
+        fmt:{impr:K,clicks:NB,leads:NB,bud:EURK,cpm:v=>DEC(v,2)+' €',cpl:v=>NB(v)+' €',cpa:v=>EURK(v)},
+        bar:'impr'},
+      analytics:{label:'Analytics-centric',hint:'Comportement on-site — source analytics web',minW:'700px',
+        cols:[['name','Canal','left'],['visits','Visites','right'],['uniq','Visiteurs uniques','right'],['bnc','Rebond','right'],['dur','Temps de visite','right'],['leads','Leads','right'],['cpv','CPV','right'],['cpl','CPL','right']],
+        fmt:{visits:K,uniq:K,bnc:v=>DEC(v,1)+' %',dur:v=>Math.floor(v/60)+' min '+String(Math.round(v%60)).padStart(2,'0')+'s',leads:NB,cpv:v=>DEC(v,2)+' €',cpl:v=>NB(v)+' €'},
+        bar:'visits'},
+      crm:{label:'CRM-centric',hint:'Retour commercial — source CRM, budget paid réconcilié',minW:'760px',
+        cols:[['name','Canal','left'],['leads','Leads','right'],['sales','Ventes','right'],['dcom','Durée commerc.','right'],['bud','Budget','right'],['cpl','CPL','right'],['cpa','CPA','right'],['roi','ROI','right'],['roas','ROAS','right']],
+        fmt:{leads:NB,sales:NB,dcom:v=>NB(v)+' j',bud:EURK,cpl:v=>NB(v)+' €',cpa:v=>EURK(v),roi:v=>DEC(v,0)+' %',roas:v=>DEC(v,1)+'×'},
+        bar:'leads'}
+    };
+    const prismChips=Object.keys(PRISMS).map(k=>({label:PRISMS[k].label,onClick:()=>me.setState({prism:k}),
+      bg:S.prism===k?'#0F2A48':'transparent',color:S.prism===k?'#FFFFFF':'#47606E'}));
+    const P=PRISMS[S.prism];
+
+    const buildTable=(type,title,badge,badgeColor,badgeBg)=>{
+      const list=chs.filter(c=>c.t===type).map(metrics);
+      const sortKey=type==='hors'?'sortHors':'sortPaid';
+      const st=S[sortKey];
+      const has=P.cols.some(c=>c[0]===st.k)?st:{k:P.cols[1][0],d:-1};
+      const sorted=list.slice().sort((a,b)=>{
+        if(has.k==='name') return a.ch.n.localeCompare(b.ch.n)*has.d*-1;
+        const av=a[has.k],bv=b[has.k];
+        if(av===null&&bv===null) return 0;
+        if(av===null) return 1;
+        if(bv===null) return -1;
+        return (av-bv)*has.d*-1;
+      });
+      const maxBar=Math.max.apply(null,list.map(m=>m[P.bar]||0).concat([1]));
+      const firstW=230,numW=98;
+      const tableMinW=(firstW+numW*(P.cols.length-1))+'px';
+      const cols=P.cols.map((c,ci)=>({label:c[1],align:c[2],title:'Trier par '+c[1],
+        width:ci===0?firstW+'px':'auto',
+        color:has.k===c[0]?'#0F2A48':'#6B8494',
+        arrow:has.k===c[0]?(has.d===-1?' ↓':' ↑'):'',
+        onClick:()=>me.setState({[sortKey]:{k:c[0],d:has.k===c[0]?-has.d:-1}})}));
+      const rows=sorted.map((m,i)=>({
+        border:i===sorted.length-1?'none':'1px solid #DCE5EA',
+        onClick:()=>me.setState({channel:m.ch.id}),
+        cells:P.cols.map(c=>{
+          const key=c[0];
+          if(key==='name') return {text:m.ch.n,align:'left',justify:'flex-start',pad,weight:'600',color:'#12232E',hasDot:true,dotColor:m.ch.c,hasBar:false,barW:'0%',barColor:m.ch.c};
+          const v=m[key];
+          const isBar=key===P.bar&&v!==null;
+          return {text:v===null?DASH:P.fmt[key](v),align:'right',justify:'flex-end',pad,
+            weight:key==='leads'?'600':'400',color:v===null?'#A8BBC6':'#12232E',
+            hasDot:false,dotColor:'#000',hasBar:isBar,barW:isBar?(v/maxBar*100).toFixed(0)+'%':'0%',barColor:m.ch.c};
+        })
+      }));
+      const totals=P.cols.map((c,ci)=>{
+        const key=c[0];
+        if(key==='name') return {text:'Total '+(type==='hors'?'hors paid':'paid'),align:'left',color:'#12232E'};
+        const vals=list.map(m=>m[key]).filter(v=>v!==null);
+        if(!vals.length) return {text:DASH,align:'right',color:'#A8BBC6'};
+        const additive=['impr','clicks','visits','uniq','leads','sales','bud'].indexOf(key)>=0;
+        let v;
+        if(additive) v=vals.reduce((a,b)=>a+b,0);
+        else if(key==='cpm'){const b=list.filter(m=>m.bud!==null).reduce((a,m)=>a+m.bud,0);const im=list.filter(m=>m.bud!==null).reduce((a,m)=>a+m.impr,0);v=im?b/im*1000:null;}
+        else if(key==='cpl'){const b=list.filter(m=>m.bud!==null).reduce((a,m)=>a+m.bud,0);const l=list.filter(m=>m.bud!==null&&m.leads!==null).reduce((a,m)=>a+m.leads,0);v=l?b/l:null;}
+        else if(key==='cpa'){const b=list.filter(m=>m.bud!==null).reduce((a,m)=>a+m.bud,0);const s=list.filter(m=>m.bud!==null&&m.sales!==null).reduce((a,m)=>a+m.sales,0);v=s?b/s:null;}
+        else if(key==='cpv'){const b=list.filter(m=>m.bud!==null).reduce((a,m)=>a+m.bud,0);const vi=list.filter(m=>m.bud!==null&&m.visits!==null).reduce((a,m)=>a+m.visits,0);v=vi?b/vi:null;}
+        else if(key==='roas'){const b=list.reduce((a,m)=>a+(m.bud||0),0);const ca=list.reduce((a,m)=>a+(m.bud?m.ca||0:0),0);v=b?ca/b:null;}
+        else if(key==='roi'){const b=list.reduce((a,m)=>a+(m.bud||0),0);const ca=list.reduce((a,m)=>a+(m.bud?m.ca||0:0),0);v=b?(ca*0.17-b)/b*100:null;}
+        else v=vals.reduce((a,b)=>a+b,0)/vals.length;
+        return {text:v===null?DASH:P.fmt[key](v),align:'right',color:v===null?'#A8BBC6':'#12232E'};
+      });
+      return {title,badge,badgeColor,badgeBg,sub:list.length+' canaux',minW:tableMinW,cols,rows,totals,
+        isEmpty:list.length===0,hasRows:list.length>0};
+    };
+    const tables=[];
+    if(S.type!=='paid') tables.push(buildTable('hors','Hors paid','Owned / earned','#0E7C66','#E6F5F0'));
+    if(S.type!=='hors') tables.push(buildTable('paid','Paid','Média acheté','#0F2A48','#E7EDF3'));
+
+    // ══════ VUE 3 ══════
+    const METRICS={impressions:{key:'i',label:'Impressions',fmt:K},leads:{key:'l',label:'Leads',fmt:NB},budget:{key:'b',label:'Budget',fmt:EURK}};
+    const metricChips=Object.keys(METRICS).map(k=>({label:METRICS[k].label,onClick:()=>me.setState({metric:k}),
+      bg:S.metric===k?'#0F2A48':'transparent',color:S.metric===k?'#FFFFFF':'#47606E'}));
+    const M=METRICS[S.metric];
+    const nBuckets=days<=60?days:Math.min(60,Math.ceil(days/7));
+    const bSize=Math.max(1,Math.ceil(days/nBuckets));
+    const bucketLabel=bSize===1?'granularité jour':'granularité '+bSize+' jours';
+    const buckets=[];
+    for(let i=from;i<=to;i+=bSize){
+      const end=Math.min(i+bSize-1,to);
+      buckets.push({from:i,to:end,label:fmtD(this.DATES[i]).slice(0,5)});
+    }
+    const bVals=buckets.map(b=>{
+      const per={};
+      let tot=0;
+      chs.forEach(ch=>{
+        let v=0;
+        for(let j=b.from;j<=b.to;j++) v+=me.SER[ch.id][j][M.key];
+        v*=me.factor(ch);
+        per[ch.id]=v;tot+=v;
+      });
+      return {per,tot};
+    });
+    const CW=1000,CH_=280,cpl=34,cpr=6,cpt=10,cpb=8;
+    const dw=CW-cpl-cpr,dh=CH_-cpt-cpb;
+    const mxTot=Math.max.apply(null,bVals.map(b=>b.tot).concat([1]));
+    const bw=Math.max(2,dw/buckets.length*0.78);
+    const chartBars=[];
+    bVals.forEach((b,i)=>{
+      let y=cpt+dh;
+      const x=cpl+(i+0.5)*(dw/buckets.length)-bw/2;
+      chs.forEach(ch=>{
+        const h=b.per[ch.id]/mxTot*dh;
+        if(h>0.4){y-=h;chartBars.push({x:x.toFixed(1),y:y.toFixed(1),w:bw.toFixed(1),h:h.toFixed(1),color:ch.c});}
+      });
+    });
+    const chartGrid=[0,1,2,3].map(k=>({x1:cpl,x2:CW-cpr,y:(cpt+k/3*dh).toFixed(1)}));
+    const lblStep=Math.max(1,Math.ceil(buckets.length/8));
+    const chartXLabels=buckets.filter((b,i)=>i%lblStep===0).map(b=>({text:b.label}));
+    const legend=chs.map(c=>({name:c.n,color:c.c}));
+
+    const heatCols='150px repeat('+buckets.length+',minmax(0,1fr))';
+    const shades=['#F1F5F4','#DCE8EC','#BFD3DC','#9BB8C7','#6E93A9','#3E6A85','#0F2A48'];
+    const heatRows=chs.map(ch=>{
+      const vals=buckets.map(b=>{
+        let v=0;
+        for(let j=b.from;j<=b.to;j++) v+=me.SER[ch.id][j][M.key];
+        return v*me.factor(ch);
+      });
+      const mx=Math.max.apply(null,vals.concat([0]));
+      return {name:ch.n,color:ch.c,onClick:()=>me.setState({channel:ch.id}),
+        cells:vals.map((v,i)=>({bg:mx?shades[Math.min(6,Math.round(v/mx*6))]:'#F6FAF9',
+          title:ch.n+' · '+buckets[i].label+' · '+(mx?M.fmt(v):'non disponible')}))};
+    });
+    const heatAxis=buckets.map((b,i)=>({text:i%lblStep===0?b.label:''}));
+    const heatScale=shades.slice(1).map(s=>({bg:s}));
+
+    const mmmCols=[['name','Canal','left'],['type','Type','left'],['impr','Impressions','right'],['clicks','Clics','right'],['visits','Visites','right'],['leads','Leads','right'],['sales','Ventes','right'],['bud','Budget','right'],['cpl','CPL','right']];
+    const mmmFmt={impr:K,clicks:NB,visits:K,leads:NB,sales:NB,bud:EURK,cpl:v=>NB(v)+' €'};
+    const mlist=chs.map(metrics);
+    const ms=S.sortMmm;
+    const msorted=mlist.slice().sort((a,b)=>{
+      if(ms.k==='name') return a.ch.n.localeCompare(b.ch.n)*ms.d*-1;
+      if(ms.k==='type') return a.ch.t.localeCompare(b.ch.t)*ms.d*-1;
+      const av=a[ms.k],bv=b[ms.k];
+      if(av===null&&bv===null) return 0;
+      if(av===null) return 1;
+      if(bv===null) return -1;
+      return (av-bv)*ms.d*-1;
+    });
+    const mmmTable={
+      cols:mmmCols.map(c=>({label:c[1],align:c[2],color:ms.k===c[0]?'#0F2A48':'#6B8494',
+        arrow:ms.k===c[0]?(ms.d===-1?' ↓':' ↑'):'',
+        onClick:()=>me.setState({sortMmm:{k:c[0],d:ms.k===c[0]?-ms.d:-1}})})),
+      rows:msorted.map((m,i)=>({
+        border:i===msorted.length-1?'none':'1px solid #DCE5EA',
+        onClick:()=>me.setState({channel:m.ch.id}),
+        cells:mmmCols.map(c=>{
+          const key=c[0];
+          if(key==='name') return {text:m.ch.n,align:'left',justify:'flex-start',pad,weight:'600',color:'#12232E',hasDot:true,dotColor:m.ch.c};
+          if(key==='type') return {text:m.ch.t==='paid'?'Paid':'Hors paid',align:'left',justify:'flex-start',pad,weight:'400',color:'#6B8494',hasDot:false,dotColor:'#000'};
+          const v=m[key];
+          return {text:v===null?DASH:mmmFmt[key](v),align:'right',justify:'flex-end',pad,weight:'400',
+            color:v===null?'#A8BBC6':'#12232E',hasDot:false,dotColor:'#000'};
+        })
+      })),
+      totals:mmmCols.map(c=>{
+        const key=c[0];
+        if(key==='name') return {text:'Total',align:'left',color:'#12232E'};
+        if(key==='type') return {text:chs.length+' canaux',align:'left',color:'#6B8494'};
+        if(key==='cpl'){const b=mlist.reduce((a,m)=>a+(m.bud||0),0);const l=mlist.reduce((a,m)=>a+(m.bud!==null?(m.leads||0):0),0);return {text:l?NB(b/l)+' €':DASH,align:'right',color:'#12232E'};}
+        const v=mlist.reduce((a,m)=>a+(m[key]||0),0);
+        return {text:mmmFmt[key](v),align:'right',color:'#12232E'};
+      })
+    };
+
+    // ══════ Drawer ══════
+    const dch=this.CH.find(c=>c.id===S.channel);
+    let drawer={color:'#0F2A48',name:'',sub:'',spark:'',sparkArea:'',stats:[],cta:'',onPrism:()=>{}};
+    if(dch){
+      const m=metrics(dch);
+      const vals=this.series([dch],from,to,S.metric==='budget'?'b':S.metric==='impressions'?'i':'l',30);
+      const sp=sparkPath(vals,360,80);
+      drawer={color:dch.c,name:dch.n,sub:(dch.t==='paid'?'Paid':'Hors paid')+' · '+rangeLabel,
+        spark:sp.line,sparkArea:sp.area,
+        stats:[
+          {label:'Impressions',value:m.impr===null?DASH:K(m.impr),color:m.impr===null?'#A8BBC6':'#12232E'},
+          {label:'Clics',value:m.clicks===null?DASH:NB(m.clicks),color:m.clicks===null?'#A8BBC6':'#12232E'},
+          {label:'Visites',value:m.visits===null?DASH:K(m.visits),color:m.visits===null?'#A8BBC6':'#12232E'},
+          {label:'Leads',value:m.leads===null?DASH:NB(m.leads),color:m.leads===null?'#A8BBC6':'#12232E'},
+          {label:'Ventes',value:m.sales===null?DASH:NB(m.sales),color:m.sales===null?'#A8BBC6':'#12232E'},
+          {label:'Budget',value:m.bud===null?DASH:EURK(m.bud),color:m.bud===null?'#A8BBC6':'#12232E'},
+          {label:'CPL',value:m.cpl===null?DASH:NB(m.cpl)+' €',color:m.cpl===null?'#A8BBC6':'#12232E'},
+          {label:'ROAS',value:m.roas===null?DASH:DEC(m.roas,1)+'×',color:m.roas===null?'#A8BBC6':'#12232E'}
+        ],
+        cta:'Ouvrir dans le prisme '+PRISMS[S.prism].label,
+        onPrism:()=>me.setState({view:'actions',channel:null})};
+    }
+
+    const titles={comex:['Synthèse COMEX','Branding et performance commerciale réconciliés'],
+      grid:['Synthèse trimestrielle','Variation de lecture : tous les indicateurs COMEX en une grille T1 → T4'],
+      actions:['Détail des actions marketing','Hors paid et paid, vus par prisme'],
+      mmm:['Mix marketing','Comparaison quotidienne de tous les canaux']};
+
+    return {
+      brandName:this.props.brandName||'Groupe Vialène',
+      navItems,periodChips,typeChips,rangeLabel,
+      program:S.program,campaign:S.campaign,
+      programOptions:[{value:'all',label:'Tous les programmes'}].concat(this.PROGRAMS.map(p=>({value:p.id,label:p.name}))),
+      campaignOptions:[{value:'all',label:'Toutes les campagnes'}].concat(this.CAMPAIGNS.map(c=>({value:c.id,label:c.name}))),
+      onProgram:e=>me.reload({program:e.target.value}),
+      onCampaign:e=>me.reload({campaign:e.target.value}),
+      hasFilters:S.program!=='all'||S.campaign!=='all'||S.type!=='all',
+      onResetFilters:()=>me.reload({program:'all',campaign:'all',type:'all'}),
+      pageTitle:titles[S.view][0],pageSub:titles[S.view][1],
+      onExport:()=>me.flash('Export PDF — maquette, action non câblée'),
+      onShare:()=>me.flash('Partage — maquette, action non câblée'),
+      onExportCsv:()=>me.flash('Export CSV — maquette, action non câblée'),
+      loading:S.loading,skeletons:[1,2,3,4,5,6],
+      isComex:S.view==='comex'&&!S.loading,isActions:S.view==='actions'&&!S.loading,isMmm:S.view==='mmm'&&!S.loading,
+      isGrid:S.view==='grid'&&!S.loading,yearChips,gridHint,gridCols,gridRows,
+      sources:[{name:'Régies publicitaires',dot:'#16A34A',sync:'2 h'},{name:'CRM',dot:'#16A34A',sync:'1 h'},
+        {name:'Outil marketing',dot:'#16A34A',sync:'3 h'},{name:'Études notoriété',dot:'#6B8494',sync:'T3'},
+        {name:'Analytics web',dot:'#16A34A',sync:'30 min'}],
+      notoSource:'Institut Vernay — sondeur indépendant',notoBase:'Base : 600 répondants / vague, zone Grand Ouest',
+      notoKpis,waves,pressionKpis,pressionMix,pressionSub:paidChs.length+' canaux paid',
+      tiersKpis,offreKpis,convKpis,progCols,progRows,
+      prismChips,prismHint:P.hint,tables,
+      metricChips,mmmHint:'Métrique appliquée au graphe, à la matrice et à la table',
+      chartTitle:M.label+' par jour, empilées par canal',bucketLabel,
+      chartGrid,chartBars,chartXLabels,legend,
+      heatCols,heatRows,heatAxis,heatScale,mmmTable,
+      drawerOpen:!!dch,drawer,onCloseDrawer:()=>me.setState({channel:null}),stop:e=>e.stopPropagation(),
+      toastOn:!!S.toast,toastMsg:S.toast
+    };
+  }
+}
+</script>
+</body>
+</html>

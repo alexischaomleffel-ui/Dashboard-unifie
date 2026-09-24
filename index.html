@@ -56,6 +56,7 @@
         </div>
       </div>
 
+      <sc-if value="{{ showFilters }}" hint-placeholder-val="{{ false }}">
       <div style="background:#FFFFFF;border:1px solid #DCE5EA;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:16px">
         <div style="display:flex;align-items:center;gap:8px">
           <span style="font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#6B8494;font-weight:600">Période</span>
@@ -96,6 +97,7 @@
           </sc-if>
         </div>
       </div>
+      </sc-if>
 
       <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
@@ -111,7 +113,7 @@
 
       <!-- ══════════ VUE 1 — SYNTHÈSE COMEX ══════════ -->
       <sc-if value="{{ isComex }}" hint-placeholder-val="{{ true }}">
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(520px,1fr));gap:16px;align-items:start">
+        <div style="display:flex;flex-direction:column;gap:28px">
 
           <section style="display:flex;flex-direction:column;gap:14px;min-width:0">
             <div style="display:flex;align-items:baseline;gap:10px">
@@ -242,41 +244,7 @@
               </sc-for>
             </div>
 
-            <div style="background:#FFFFFF;border:1px solid #DCE5EA;border-radius:16px;padding:18px;animation:rmRise .45s ease both">
-              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px">
-                <h3 style="font-size:14px;font-weight:600;margin:0">Programmes à la vente</h3>
-                <span style="font-size:11px;color:#6B8494">CRM · mise à jour quotidienne</span>
-              </div>
-              <div style="overflow-x:auto">
-                <table style="width:100%;border-collapse:collapse;min-width:520px">
-                  <thead><tr>
-                    <sc-for list="{{ progCols }}" as="c" hint-placeholder-count="6">
-                      <th style="text-align:{{ c.align }};font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#6B8494;font-weight:600;padding:8px;border-bottom:1px solid #DCE5EA;white-space:nowrap">{{ c.label }}</th>
-                    </sc-for>
-                  </tr></thead>
-                  <tbody>
-                    <sc-for list="{{ progRows }}" as="r" hint-placeholder-count="6">
-                      <tr onClick="{{ r.onClick }}" style="cursor:pointer;transition:background .12s" style-hover="background:#F0F5F4">
-                        <td style="padding:10px 8px;border-bottom:{{ r.border }}">
-                          <div style="font-size:13px;font-weight:600">{{ r.name }}</div>
-                          <div style="font-size:11px;color:#6B8494">{{ r.city }}</div>
-                        </td>
-                        <td style="padding:10px 8px;border-bottom:{{ r.border }};text-align:right;font-size:13px;font-variant-numeric:tabular-nums">{{ r.lots }}</td>
-                        <td style="padding:10px 8px;border-bottom:{{ r.border }};text-align:right;font-size:13px;font-variant-numeric:tabular-nums">{{ r.leads }}</td>
-                        <td style="padding:10px 8px;border-bottom:{{ r.border }};text-align:right;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums">{{ r.sales }}</td>
-                        <td style="padding:10px 8px;border-bottom:{{ r.border }};text-align:right;font-size:13px;font-variant-numeric:tabular-nums">{{ r.ca }}</td>
-                        <td style="padding:10px 8px;border-bottom:{{ r.border }};text-align:right">
-                          <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
-                            <div style="width:64px;height:5px;border-radius:3px;background:#EDF2F1;overflow:hidden"><div style="height:5px;border-radius:3px;background:#0F2A48;width:{{ r.ecoulW }}"></div></div>
-                            <span style="font-size:12px;font-variant-numeric:tabular-nums;color:#47606E;width:38px;text-align:right">{{ r.ecoul }}</span>
-                          </div>
-                        </td>
-                      </tr>
-                    </sc-for>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            
           </section>
         </div>
       </sc-if>
@@ -1142,6 +1110,7 @@ class Component extends DCLogic {
     return {
       brandName:this.props.brandName||'Groupe Vialène',
       navItems,periodChips,typeChips,rangeLabel,
+      showFilters:S.view!=='comex'&&S.view!=='grid',
       program:S.program,campaign:S.campaign,
       programOptions:[{value:'all',label:'Tous les programmes'}].concat(this.PROGRAMS.map(p=>({value:p.id,label:p.name}))),
       campaignOptions:[{value:'all',label:'Toutes les campagnes'}].concat(this.CAMPAIGNS.map(c=>({value:c.id,label:c.name}))),
